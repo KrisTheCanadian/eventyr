@@ -50,6 +50,27 @@ module.exports.run = async (bot, message, args) => {
 
     }
 
+    if (args[0] === "leave") {
+
+        if (!sessions[args[1]]) return message.reply(`Enter a valid session number.`);
+        else if (!(sessions[args[1]].users.findIndex(user => user === message.author.id) === -1))
+        {
+
+            sessions[args[1]].users.splice(sessions[args[1]].users.findIndex(user => user === message.author.id));
+
+            if (sessions[args[1]].users.length() === 0) {
+                sessions.splice(args[1]);
+            }
+
+            fs.writeFile("./sessions.json", JSON.stringify(sessions), (err) => {if (err) console.log(err)});
+
+            return message.reply("You have successfully left the group");
+        }
+
+        else {return message.reply("You are not part of that session.");}
+
+    }
+
 
 
     function createID() {
